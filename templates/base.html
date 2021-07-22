@@ -22,6 +22,13 @@
 </head>
     {% include 'partials/_topbar.html' %}
     {% include 'partials/_navbar.html' %}
+    <div class="container mt-3">
+      <div class="row justify-content-md-center">
+          <div class="col-xs-12">
+              {% include 'partials/_alerts.html' %}
+          </div>
+      </div>
+  </div>
     {% block content %} {% endblock %}
 
     {% include 'partials/_footer.html' %}
