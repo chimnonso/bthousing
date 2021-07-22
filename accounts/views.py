@@ -1,9 +1,13 @@
+from django.contrib.auth.decorators import login_required
+from contacts.models import Contact
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
+from contacts.models import Contact
 
 def login(request):
     if request.method == 'POST':
+        next = request.POST.get("next")
         username = request.POST['username']
         password = request.POST['password']
         user = auth.authenticate(request, username=username, password=password)
@@ -11,6 +15,8 @@ def login(request):
         if user is not None:
             auth.login(request, user)
             messages.add_message(request, messages.SUCCESS, 'Login Successful')
+            if next:
+                return redirect(next)
             return redirect('index')
         else:
             messages.add_message(request, messages.ERROR, 'Invalid Credentials. Login Unsuccessful')
@@ -18,9 +24,8 @@ def login(request):
     
     return render(request, 'accounts/login.html')
 
-
+@login_required
 def register(request):
-    is_correct = True
     if request.method == 'POST':
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
@@ -57,11 +62,17 @@ def register(request):
     return render(request, 'accounts/register.html', context)
 
 
+@login_required
 def dashboard(request):
+    contacts = Contact.objects.filter(user_id=request.user.id)
     
-    context = {}
+    context = {
+        'contacts': contacts,
+    }
+    print(contacts)
     return render(request, 'accounts/dashboard.html', context)
 
+@login_required
 def logout(request):
     if request.method == 'POST':
         auth.logout(request)

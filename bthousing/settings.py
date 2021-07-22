@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'realtors',
     'listings',
     'accounts',
+    'contacts',
 ]
 
 MIDDLEWARE = [
@@ -146,4 +147,6 @@ from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
+
+LOGIN_URL = '/accounts/login'
 
